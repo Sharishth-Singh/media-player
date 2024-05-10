@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import useMediaStore from "./store";
+import { GiSpeedometer } from "react-icons/gi";
 import {
     FaPlay,
     FaPause,
@@ -17,8 +18,7 @@ import {
 import "./MediaPlayer.css";
 
 const MediaPlayer = () => {
-    const { mediaList, currentIndex, nextMedia, prevMedia } =
-        useMediaStore();
+    const { mediaList, currentIndex, nextMedia, prevMedia } = useMediaStore();
     const currentMedia = mediaList[currentIndex];
 
     const mediaRef = useRef(null);
@@ -30,22 +30,33 @@ const MediaPlayer = () => {
     const [duration, setDuration] = useState(0);
     const [isMinimized, setIsMinimized] = useState(false);
     const [playbackRate, setPlaybackRate] = useState(1); // Default playback rate
+    const [isSpeedListOpen, setIsSpeedListOpen] = useState(false);
 
     // Playback rate options
     const playbackRates = [
-        0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4
+        0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75,
+        4,
     ];
 
     // make a function to reset the progress bar
     const resetProgressBar = () => {
         setCurrentTime(0);
         setDuration(0);
-    }
+    };
 
     const nextMedia_resetProgressBar = () => {
         nextMedia();
         resetProgressBar();
-    }
+        if(playing)
+            setPlaying(!playing);
+    };
+
+    const prevMedia_resetProgressBar = () => {
+        prevMedia();
+        resetProgressBar();
+        if(playing)
+            setPlaying(!playing);
+    };
 
     useEffect(() => {
         if (mediaRef.current) {
@@ -90,6 +101,7 @@ const MediaPlayer = () => {
                     break;
                 case "p":
                     prevMedia();
+                    resetProgressBar();
                     break;
                 default:
                     break;
@@ -175,6 +187,17 @@ const MediaPlayer = () => {
         mediaRef.current.currentTime = clickPercentage * duration;
     };
 
+    // Toggle the visibility of the speed list
+    const toggleSpeedList = () => {
+        setIsSpeedListOpen(!isSpeedListOpen);
+    };
+
+    // Handle the selection of a playback rate
+    const handlePlaybackRateSelect = (rate) => {
+        setPlaybackRate(rate);
+        setIsSpeedListOpen(false); // Hide the list after selecting a rate
+    };
+
     return (
         <div className={`media-player ${isMinimized ? "minimized" : ""}`}>
             <div className="media-container">
@@ -198,6 +221,8 @@ const MediaPlayer = () => {
                                 width: "80%",
                                 height: "80%",
                                 objectFit: "cover",
+                                justifyItems: "center",
+                                alignItems: "center",
                             }}
                         />
                     </div>
@@ -222,7 +247,7 @@ const MediaPlayer = () => {
                 </span>
             </div>
             <div className="media-controls">
-                <button onClick={prevMedia}>
+                <button onClick={prevMedia_resetProgressBar}>
                     <FaChevronLeft />
                 </button>
                 <button onClick={togglePlayPause}>
@@ -255,21 +280,27 @@ const MediaPlayer = () => {
                     <FaTimes />
                 </button>
 
-                {/* Playback rate list */}
-                <div className="playback-rate-list">
-                    {playbackRates.map((rate) => (
-                        <button
-                            key={rate}
-                            onClick={() => setPlaybackRate(rate)}
-                            className={`playback-rate-button ${
-                                playbackRate === rate ? "active" : ""
-                            }`}
-                        >
-                            {rate}x
-                        </button>
-                    ))}
-                </div>
+                {/* Speed list button */}
+                <button onClick={toggleSpeedList}>
+                    <GiSpeedometer />
+                </button>
 
+                {/* Vertical speed list */}
+                {isSpeedListOpen && (
+                    <div className="speed-list">
+                        {playbackRates.map((rate) => (
+                            <button
+                                key={rate}
+                                onClick={() => handlePlaybackRateSelect(rate)}
+                                className={`speed-list-item ${
+                                    playbackRate === rate ? "active" : ""
+                                }`}
+                            >
+                                {rate}x
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
