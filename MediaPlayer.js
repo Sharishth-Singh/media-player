@@ -210,7 +210,7 @@ const MediaPlayer = () => {
                         controls={false}
                     />
                 ) : (
-                    <div className="video-container">
+                    // <div className="video-container">
                         <video
                             ref={mediaRef}
                             src={currentMedia.url}
@@ -221,11 +221,9 @@ const MediaPlayer = () => {
                                 width: "80%",
                                 height: "80%",
                                 objectFit: "cover",
-                                justifyItems: "center",
-                                alignItems: "center",
                             }}
                         />
-                    </div>
+                    // </div>
                 )}
             </div>
             <div
