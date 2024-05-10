@@ -210,7 +210,7 @@ const MediaPlayer = () => {
                         controls={false}
                     />
                 ) : (
-                    // <div className="video-container">
+                    <div className="video-container">
                         <video
                             ref={mediaRef}
                             src={currentMedia.url}
@@ -218,12 +218,12 @@ const MediaPlayer = () => {
                             onTimeUpdate={handleTimeUpdate}
                             controls={false}
                             style={{
-                                width: "80%",
-                                height: "80%",
+                                width: "100%",
+                                height: "100%",
                                 objectFit: "cover",
                             }}
                         />
-                    // </div>
+                    </div>
                 )}
             </div>
             <div
@@ -239,7 +239,6 @@ const MediaPlayer = () => {
                 <span>
                     {new Date(currentTime * 1000).toISOString().substr(11, 8)}
                 </span>
-                <span> / </span>
                 <span>
                     {new Date(duration * 1000).toISOString().substr(11, 8)}
                 </span>
