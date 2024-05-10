@@ -44,6 +44,31 @@
   display: block;
 }
 
+.playback-rate-list {
+  background-color: black; /* Black background */
+  display: flex; /* Use flex layout to align buttons */
+  padding: 5px; /* Add some padding */
+  margin-top: 5px; /* Add some margin to separate from other controls */
+}
+
+.playback-rate-button {
+  color: white; /* White text color for buttons */
+  background-color: black; /* Black background for buttons */
+  border: none; /* Remove button border */
+  padding: 5px 10px; /* Add some padding to the buttons */
+  margin-right: 5px; /* Add some margin between buttons */
+  cursor: pointer; /* Change cursor style to pointer */
+}
+
+.playback-rate-button:hover {
+  background-color: gray; /* Change background color on hover */
+}
+
+.playback-rate-button.active {
+  background-color: darkgray; /* Change background color for active button */
+}
+
+
 .video-container {
   display: flex;
   justify-content: center;

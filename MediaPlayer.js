@@ -1,11 +1,23 @@
 import React, { useRef, useState, useEffect } from "react";
 import useMediaStore from "./store";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaFastBackward, FaFastForward, FaExpand, FaCompress, FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
+import {
+    FaPlay,
+    FaPause,
+    FaVolumeUp,
+    FaVolumeMute,
+    FaFastBackward,
+    FaFastForward,
+    FaExpand,
+    FaCompress,
+    FaChevronLeft,
+    FaChevronRight,
+    FaTimes,
+} from "react-icons/fa";
 
 import "./MediaPlayer.css";
 
 const MediaPlayer = () => {
-    const { mediaList, currentIndex, setCurrentIndex, nextMedia, prevMedia } =
+    const { mediaList, currentIndex, nextMedia, prevMedia } =
         useMediaStore();
     const currentMedia = mediaList[currentIndex];
 
@@ -17,11 +29,12 @@ const MediaPlayer = () => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isMinimized, setIsMinimized] = useState(false);
+    const [playbackRate, setPlaybackRate] = useState(1); // Default playback rate
 
     // Playback rate options
-    const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4];
-
-    const [playbackRate, setPlaybackRate] = useState(1); // Default playback rate
+    const playbackRates = [
+        0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4
+    ];
 
     useEffect(() => {
         if (mediaRef.current) {
@@ -229,8 +242,8 @@ const MediaPlayer = () => {
                     <FaTimes />
                 </button>
 
-                {/* Add a dropdown list or buttons for speed up options */}
-                <div className="playback-rate-controls">
+                {/* Playback rate list */}
+                <div className="playback-rate-list">
                     {playbackRates.map((rate) => (
                         <button
                             key={rate}
