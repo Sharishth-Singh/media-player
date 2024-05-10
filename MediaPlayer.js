@@ -202,13 +202,19 @@ const MediaPlayer = () => {
         <div className={`media-player ${isMinimized ? "minimized" : ""}`}>
             <div className="media-container">
                 {currentMedia.type === "audio" ? (
-                    <audio
-                        ref={mediaRef}
-                        src={currentMedia.url}
-                        onLoadedMetadata={handleLoadedMetadata}
-                        onTimeUpdate={handleTimeUpdate}
-                        controls={false}
-                    />
+                    <>
+                        <audio
+                            ref={mediaRef}
+                            src={currentMedia.url}
+                            onLoadedMetadata={handleLoadedMetadata}
+                            onTimeUpdate={handleTimeUpdate}
+                            controls={false} />
+                        <div className="audio-icon">
+                            <span role="img" aria-label="audio-playing-icon">
+                            🎶
+                            </span>
+                        </div>   
+                    </>
                 ) : (
                     <div className="video-container">
                         <video
@@ -252,12 +258,6 @@ const MediaPlayer = () => {
                 </button>
                 <button onClick={nextMedia_resetProgressBar}>
                     <FaChevronRight />
-                </button>
-                <button onClick={skipBackward}>
-                    <FaFastBackward />
-                </button>
-                <button onClick={skipForward}>
-                    <FaFastForward />
                 </button>
                 <button onClick={toggleMute}>
                     {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}

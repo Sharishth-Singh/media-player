@@ -110,34 +110,64 @@
 /* Speed list container */
 .speed-list {
   position: absolute;
-  top: -10px;
-  right: 0;
-  background-color: white;
-  border: 1px solid #dee2e6; /* Light border */
-  border-radius: 4px;
+  bottom: 100%; /* Place the list above the control element */
+  right: 0; /* Align the list to the right */
+  background-color: #000000; /* Black background */
+  border: 1px solid #dee2e6; /* Light gray border */
+  border-radius: 6px; /* Slightly rounded corners */
   overflow: hidden;
   transition: height 0.3s ease; /* Smooth height transition */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Soft shadow for depth */
+  z-index: 1001; /* Ensure it appears above other elements */
+  width: max-content; /* Adjusts the width to fit the content */
+  display: flex; /* Use flexbox layout */
+  flex-direction: column; /* Arrange list items vertically */
 }
 
-/* Speed list item buttons */
+/* Speed list items */
 .speed-list-item {
-  padding: 8px 12px; /* Padding */
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  width: 100%;
-  text-align: left;
+  padding: 8px 16px; /* Padding for better spacing */
+  color: white; /* White text color for better contrast */
+  cursor: pointer; /* Pointer cursor to indicate interactivity */
+  text-align: left; /* Left-aligned text */
+  border-bottom: 1px solid #dee2e6; /* Separate items with a light border */
   transition: background-color 0.3s ease; /* Smooth background transition */
 }
 
+/* Hover effect for speed list items */
 .speed-list-item:hover {
-  background-color: #e9ecef; /* Subtle background color on hover */
+  background-color: #333333; /* Dark gray background on hover */
+  color: white; /* White text color for contrast */
+}
+
+/* Remove the bottom border for the last item */
+.speed-list-item:last-child {
+  border-bottom: none;
 }
 
 /* Active speed list item */
 .speed-list-item.active {
-  background-color: #e9ecef; /* Same as hover */
-  color: #495057; /* Darker text color */
+  background-color: #ff6f61; /* Same as hover */
+  color: #ffffff; /* Darker text color */
+}
+
+/* Audio icon styling */
+.audio-icon {
+  position: absolute; /* Position the icon absolutely within the audio player container */
+  top: 50%; /* Center the icon vertically */
+  left: 50%; /* Center the icon horizontally */
+  transform: translate(-50%, -50%); /* Use transformation to center the icon precisely */
+  font-size: 48px; /* Large size for the emoji */
+  color: white; /* White color for the icon */
+  cursor: pointer; /* Indicates interactivity */
+  z-index: 1002; /* Ensure the icon appears above other elements */
+}
+
+/* Optional hover effect for the audio icon */
+.audio-icon:hover {
+  color: #ff6f61; /* Softer red color when hovered */
+  transform: translate(-50%, -50%) scale(1.1); /* Slightly increase the icon size on hover */
+  transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition effect */
 }
 
 /* Minimized media player */
