@@ -1,18 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import useMediaStore from "./store";
-import {
-    FaPlay,
-    FaPause,
-    FaVolumeUp,
-    FaVolumeMute,
-    FaFastForward,
-    FaFastBackward,
-    FaExpand,
-    FaCompress,
-    FaChevronLeft,
-    FaChevronRight,
-    FaTimes,
-} from "react-icons/fa";
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaFastBackward, FaFastForward, FaExpand, FaCompress, FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
+
 import "./MediaPlayer.css";
 
 const MediaPlayer = () => {
@@ -24,11 +13,15 @@ const MediaPlayer = () => {
     const [playing, setPlaying] = useState(false);
     const [volume, setVolume] = useState(0.5);
     const [isMuted, setIsMuted] = useState(false);
-    const [playbackRate, setPlaybackRate] = useState(1);
     const [fullscreen, setFullscreen] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isMinimized, setIsMinimized] = useState(false);
+
+    // Playback rate options
+    const playbackRates = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4];
+
+    const [playbackRate, setPlaybackRate] = useState(1); // Default playback rate
 
     useEffect(() => {
         if (mediaRef.current) {
@@ -235,16 +228,22 @@ const MediaPlayer = () => {
                 <button onClick={toggleMinimize}>
                     <FaTimes />
                 </button>
-                <input
-                    type="range"
-                    min="0.5"
-                    max="4"
-                    step="0.25"
-                    value={playbackRate}
-                    onChange={(e) =>
-                        setPlaybackRate(parseFloat(e.target.value))
-                    }
-                />
+
+                {/* Add a dropdown list or buttons for speed up options */}
+                <div className="playback-rate-controls">
+                    {playbackRates.map((rate) => (
+                        <button
+                            key={rate}
+                            onClick={() => setPlaybackRate(rate)}
+                            className={`playback-rate-button ${
+                                playbackRate === rate ? "active" : ""
+                            }`}
+                        >
+                            {rate}x
+                        </button>
+                    ))}
+                </div>
+
             </div>
         </div>
     );
