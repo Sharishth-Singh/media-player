@@ -3,8 +3,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import useMediaStore from './store';
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute, FaFastForward, FaFastBackward, FaExpand, FaCompress, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import './MediaPlayer.css';
-// import useMediaStore from './store';
-
 
 const MediaPlayer = () => {
   const { mediaList, currentIndex, setCurrentIndex, nextMedia, prevMedia } = useMediaStore();
@@ -147,6 +145,33 @@ const MediaPlayer = () => {
 
   return (
     <div className={`media-player ${isMinimized ? 'minimized' : ''}`}>
+      <div className="media-container">
+        {currentMedia.type === 'audio' ? (
+          <audio
+            ref={mediaRef}
+            src={currentMedia.url}
+            onLoadedMetadata={handleLoadedMetadata}
+            onTimeUpdate={handleTimeUpdate}
+            controls={false}
+          />
+        ) : (
+          <video
+            ref={mediaRef}
+            src={currentMedia.url}
+            onLoadedMetadata={handleLoadedMetadata}
+            onTimeUpdate={handleTimeUpdate}
+            controls={false}
+          />
+        )}
+      </div>
+      <div className="progress-bar-container" onClick={handleProgressBarClick}>
+        <div className="progress-bar" style={{ width: `${(currentTime / duration) * 100}%` }} />
+      </div>
+      <div className="time-display">
+        <span>{new Date(currentTime * 1000).toISOString().substr(11, 8)}</span>
+        <span> / </span>
+        <span>{new Date(duration * 1000).toISOString().substr(11, 8)}</span>
+      </div>
       <div className="media-controls">
         <button onClick={prevMedia}><FaChevronLeft /></button>
         <button onClick={togglePlayPause}>{playing ? <FaPause /> : <FaPlay />}</button>
@@ -172,36 +197,6 @@ const MediaPlayer = () => {
           value={playbackRate}
           onChange={(e) => setPlaybackRate(parseFloat(e.target.value))}
         />
-      </div>
-      <div className="media-container">
-        {currentMedia.type === 'audio' ? (
-          <audio
-            ref={mediaRef}
-            src={currentMedia.url}
-            onLoadedMetadata={handleLoadedMetadata}
-            onTimeUpdate={handleTimeUpdate}
-            controls={false}
-          />
-        ) : (
-          <video
-            ref={mediaRef}
-            src={currentMedia.url}
-            onLoadedMetadata={handleLoadedMetadata}
-            onTimeUpdate={handleTimeUpdate}
-            controls={false}
-          />
-        )}
-      </div>
-      <div className="progress-bar-container" onClick={handleProgressBarClick}>
-        <div
-          className="progress-bar"
-          style={{ width: `${(currentTime / duration) * 100}%` }}
-        />
-      </div>
-      <div className="time-display">
-        <span>{new Date(currentTime * 1000).toISOString().substr(11, 8)}</span>
-        <span> / </span>
-        <span>{new Date(duration * 1000).toISOString().substr(11, 8)}</span>
       </div>
     </div>
   );
