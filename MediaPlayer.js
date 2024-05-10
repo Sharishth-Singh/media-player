@@ -36,6 +36,17 @@ const MediaPlayer = () => {
         0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4
     ];
 
+    // make a function to reset the progress bar
+    const resetProgressBar = () => {
+        setCurrentTime(0);
+        setDuration(0);
+    }
+
+    const nextMedia_resetProgressBar = () => {
+        nextMedia();
+        resetProgressBar();
+    }
+
     useEffect(() => {
         if (mediaRef.current) {
             mediaRef.current.volume = volume;
@@ -75,6 +86,7 @@ const MediaPlayer = () => {
                     break;
                 case "n":
                     nextMedia();
+                    resetProgressBar();
                     break;
                 case "p":
                     prevMedia();
@@ -87,6 +99,7 @@ const MediaPlayer = () => {
         window.addEventListener("keydown", handleKeyDown);
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
+            resetProgressBar();
         };
     }, [nextMedia, prevMedia, volume, playbackRate]);
 
@@ -215,7 +228,7 @@ const MediaPlayer = () => {
                 <button onClick={togglePlayPause}>
                     {playing ? <FaPause /> : <FaPlay />}
                 </button>
-                <button onClick={nextMedia}>
+                <button onClick={nextMedia_resetProgressBar}>
                     <FaChevronRight />
                 </button>
                 <button onClick={skipBackward}>

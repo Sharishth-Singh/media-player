@@ -8,7 +8,7 @@ const useMediaStore = create((set) => ({
         title: 'Audio 1'
       },
       {
-        url: 'https://videos.pexels.com/video-files/1812902/1812902-uhd_3840_2160_30fps.mp4',
+        url: 'https://videos.pexels.com/video-files/1893738/1893738-uhd_3840_2160_25fps.mp4',
         type: 'video',
         title: 'Video 1'
       },
