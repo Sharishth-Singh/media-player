@@ -31,6 +31,7 @@ const MediaPlayer = () => {
     const [isMinimized, setIsMinimized] = useState(false);
     const [playbackRate, setPlaybackRate] = useState(1); // Default playback rate
     const [isSpeedListOpen, setIsSpeedListOpen] = useState(false);
+    const [isHovered, setIsHovered] = useState(false); // State to track mouse hover
 
     // Playback rate options
     const playbackRates = [
@@ -47,21 +48,20 @@ const MediaPlayer = () => {
     const nextMedia_resetProgressBar = () => {
         nextMedia();
         resetProgressBar();
-        if(playing)
-            setPlaying(!playing);
+        if (playing) setPlaying(!playing);
     };
 
     const prevMedia_resetProgressBar = () => {
         prevMedia();
         resetProgressBar();
-        if(playing)
-            setPlaying(!playing);
+        if (playing) setPlaying(!playing);
     };
 
     useEffect(() => {
         if (mediaRef.current) {
             mediaRef.current.volume = volume;
             mediaRef.current.playbackRate = playbackRate;
+            setDuration(mediaRef.current.duration);
         }
     }, [volume, playbackRate]);
 
@@ -199,7 +199,11 @@ const MediaPlayer = () => {
     };
 
     return (
-        <div className={`media-player ${isMinimized ? "minimized" : ""}`}>
+        <div 
+            className={`media-player ${isMinimized ? "minimized" : ""}`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <div className="media-container">
                 {currentMedia.type === "audio" ? (
                     <>
@@ -208,12 +212,13 @@ const MediaPlayer = () => {
                             src={currentMedia.url}
                             onLoadedMetadata={handleLoadedMetadata}
                             onTimeUpdate={handleTimeUpdate}
-                            controls={false} />
+                            controls={false}
+                        />
                         <div className="audio-icon">
                             <span role="img" aria-label="audio-playing-icon">
-                            🎶
+                                🎶
                             </span>
-                        </div>   
+                        </div>
                     </>
                 ) : (
                     <div className="video-container">
@@ -232,73 +237,84 @@ const MediaPlayer = () => {
                     </div>
                 )}
             </div>
-            <div
-                className="progress-bar-container"
-                onClick={handleProgressBarClick}
-            >
-                <div
-                    className="progress-bar"
-                    style={{ width: `${(currentTime / duration) * 100}%` }}
-                />
-            </div>
-            <div className="time-display">
-                <span>
-                    {new Date(currentTime * 1000).toISOString().substr(11, 8)}
-                </span>
-                <span>
-                    {new Date(duration * 1000).toISOString().substr(11, 8)}
-                </span>
-            </div>
-            <div className="media-controls">
-                <button onClick={prevMedia_resetProgressBar}>
-                    <FaChevronLeft />
-                </button>
-                <button onClick={togglePlayPause}>
-                    {playing ? <FaPause /> : <FaPlay />}
-                </button>
-                <button onClick={nextMedia_resetProgressBar}>
-                    <FaChevronRight />
-                </button>
-                <button onClick={toggleMute}>
-                    {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-                </button>
-                <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={volume}
-                    onChange={(e) => setVolume(parseFloat(e.target.value))}
-                />
-                <button onClick={toggleFullScreen}>
-                    {fullscreen ? <FaCompress /> : <FaExpand />}
-                </button>
-                <button onClick={toggleMinimize}>
-                    <FaTimes />
-                </button>
-
-                {/* Speed list button */}
-                <button onClick={toggleSpeedList}>
-                    <GiSpeedometer />
-                </button>
-
-                {/* Vertical speed list */}
-                {isSpeedListOpen && (
-                    <div className="speed-list">
-                        {playbackRates.map((rate) => (
-                            <button
-                                key={rate}
-                                onClick={() => handlePlaybackRateSelect(rate)}
-                                className={`speed-list-item ${
-                                    playbackRate === rate ? "active" : ""
-                                }`}
-                            >
-                                {rate}x
-                            </button>
-                        ))}
+            {(isHovered || !playing) && (
+                <>
+                    <div
+                        className="progress-bar-container"
+                        onClick={handleProgressBarClick}
+                    >
+                        <div
+                            className="progress-bar"
+                            style={{ width: `${(currentTime / duration) * 100}%` }}
+                        />
                     </div>
-                )}
-            </div>
+                    <div className="time-display">
+                        <span>
+                            {new Date(currentTime * 1000).toISOString().substr(11, 8)}
+                        </span>
+                        <span>
+                            {new Date(duration * 1000).toISOString().substr(11, 8)}
+                        </span>
+                    </div>
+                    <div className="media-controls">
+                        <button onClick={skipBackward}>
+                            <FaFastBackward />
+                        </button>
+                        <button onClick={prevMedia_resetProgressBar}>
+                            <FaChevronLeft />
+                        </button>
+                        <button onClick={togglePlayPause}>
+                            {playing ? <FaPause /> : <FaPlay />}
+                        </button>
+                        <button onClick={nextMedia_resetProgressBar}>
+                            <FaChevronRight />
+                        </button>
+                        <button onClick={skipForward}>
+                            <FaFastForward />
+                        </button>
+                        <button onClick={toggleMute}>
+                            {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+                        </button>
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={volume}
+                            onChange={(e) => setVolume(parseFloat(e.target.value))}
+                        />
+                        <button
+                            onClick={toggleFullScreen}
+                            className={!isMinimized ? "visible" : "hidden"}
+                        >
+                            {fullscreen ? null : <FaExpand />}
+                        </button>
+                        <button onClick={toggleMinimize}>
+                            <FaTimes />
+                        </button>
+                        {/* Speed list button */}
+                        <button onClick={toggleSpeedList}>
+                            <GiSpeedometer />
+                        </button>
+                        {/* Vertical speed list */}
+                        {isSpeedListOpen && (
+                            <div className="speed-list">
+                                {playbackRates.map((rate) => (
+                                    <button
+                                        key={rate}
+                                        onClick={() => handlePlaybackRateSelect(rate)}
+                                        className={`speed-list-item ${
+                                            playbackRate === rate ? "active" : ""
+                                        }`}
+                                    >
+                                        {rate}x
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

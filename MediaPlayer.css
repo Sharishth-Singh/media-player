@@ -74,7 +74,7 @@
   bottom: 0px; /* Position controls at the bottom */
   width: 100%; /* Full width of the video container */
   display: flex;
-  justify-content: space-between; /* Even spacing */
+  justify-content: space-between; /* Even spacing*/
   align-items: center;
   padding: 10px;
   /* Use a linear gradient for the background color */
@@ -178,7 +178,7 @@
   width: 320px; /* Fixed width */
   height: 180px; /* Fixed height */
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   background-color: white; /* White background */
   border-radius: 8px; /* Rounded corners */
@@ -225,3 +225,17 @@
 .media-player.minimized .controls-overlay button:hover {
   color: #ff6f61; /* Softer red on hover */
 }
+
+
+
+.visible {
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+
