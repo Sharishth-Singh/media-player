@@ -121,8 +121,11 @@ const MediaPlayer = () => {
             mediaRef.current.pause();
         } else {
             mediaRef.current.play();
-        }
+        }        
+       
+
     };
+    
 
     const increaseVolume = () => {
         let newVolume = volume + 0.1;
@@ -154,16 +157,57 @@ const MediaPlayer = () => {
     };
 
     const toggleFullScreen = () => {
+        // console.log(document.fullscreenElement)
         if (!fullscreen) {
-            mediaRef.current.requestFullscreen();
+            const player = document.querySelector(".media-player");
+            if (player) {
+                if (player.requestFullscreen) {
+                    player.requestFullscreen();
+                } else if (player.mozRequestFullScreen) {
+                    /* Firefox */
+                    player.mozRequestFullScreen();
+                } else if (player.webkitRequestFullscreen) {
+                    /* Chrome, Safari & Opera */
+                    player.webkitRequestFullscreen();
+                } else if (player.msRequestFullscreen) {
+                    /* IE/Edge */
+                    player.msRequestFullscreen();
+                }
+            }
         } else {
-            document.exitFullscreen();
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                /* Chrome, Safari & Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                /* IE/Edge */
+                document.msExitFullscreen();
+            }
         }
         setFullscreen(!fullscreen);
     };
 
     const exitFullScreen = () => {
-        document.exitFullscreen();
+        if (
+            document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement
+        ) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
         setFullscreen(false);
     };
 
@@ -199,12 +243,12 @@ const MediaPlayer = () => {
     };
 
     return (
-        <div 
+        <div
             className={`media-player ${isMinimized ? "minimized" : ""}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-{!isMinimized && (
+            {!isMinimized && (
                 <div className="media-title">{currentMedia.title}</div>
             )}
             <div className="media-container">
@@ -248,15 +292,21 @@ const MediaPlayer = () => {
                     >
                         <div
                             className="progress-bar"
-                            style={{ width: `${(currentTime / duration) * 100}%` }}
+                            style={{
+                                width: `${(currentTime / duration) * 100}%`,
+                            }}
                         />
                     </div>
                     <div className="time-display">
                         <span>
-                            {new Date(currentTime * 1000).toISOString().substr(11, 8)}
+                            {new Date(currentTime * 1000)
+                                .toISOString()
+                                .substr(11, 8)}
                         </span>
                         <span>
-                            {new Date(duration * 1000).toISOString().substr(11, 8)}
+                            {new Date(duration * 1000)
+                                .toISOString()
+                                .substr(11, 8)}
                         </span>
                     </div>
                     <div className="media-controls">
@@ -284,13 +334,15 @@ const MediaPlayer = () => {
                             max="1"
                             step="0.01"
                             value={volume}
-                            onChange={(e) => setVolume(parseFloat(e.target.value))}
+                            onChange={(e) =>
+                                setVolume(parseFloat(e.target.value))
+                            }
                         />
                         <button
                             onClick={toggleFullScreen}
                             className={!isMinimized ? "visible" : "hidden"}
                         >
-                            {fullscreen ? null : <FaExpand />}
+                            {fullscreen ? <FaCompress /> : <FaExpand />}
                         </button>
                         <button onClick={toggleMinimize}>
                             <FaTimes />
@@ -305,9 +357,13 @@ const MediaPlayer = () => {
                                 {playbackRates.map((rate) => (
                                     <button
                                         key={rate}
-                                        onClick={() => handlePlaybackRateSelect(rate)}
+                                        onClick={() =>
+                                            handlePlaybackRateSelect(rate)
+                                        }
                                         className={`speed-list-item ${
-                                            playbackRate === rate ? "active" : ""
+                                            playbackRate === rate
+                                                ? "active"
+                                                : ""
                                         }`}
                                     >
                                         {rate}x
