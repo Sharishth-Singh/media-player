@@ -21,6 +21,15 @@
   border-bottom: 1px solid #00020391; /* Light border */
 }
 
+.media-title {
+  position: absolute;
+  top: 10px; /* Adjust top position as needed */
+  left: 10px; /* Adjust left position as needed */
+  color: white; /* Set title color */
+  font-size: 24px; /* Set title font size */
+  z-index: 1; /* Ensure title appears above video */
+}
+
 .video-container {
   display: flex;
   justify-content: center;
@@ -30,7 +39,6 @@
   position: relative; /* Allow absolute positioning within */
   background-color: black; /* Optional: black background for video */
 }
-
 
 /* Progress bar container */
 .progress-bar-container {

@@ -12,6 +12,21 @@ const useMediaStore = create((set) => ({
         type: 'video',
         title: 'Video 1'
       },
+      {
+        url: 'https://videos.pexels.com/video-files/2157006/2157006-hd_1920_1080_25fps.mp4',
+        type: 'video',
+        title: 'Video 2'
+      },
+      {
+        url: 'https://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3',
+        type: 'audio',
+        title: 'Audio 2'
+      },
+      {
+        url: 'http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3',
+        type: 'audio',
+        title: 'Audio 3'
+      },
       // your media list here
     ],
     currentIndex: 0,

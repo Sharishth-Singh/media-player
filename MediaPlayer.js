@@ -204,6 +204,9 @@ const MediaPlayer = () => {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
+{!isMinimized && (
+                <div className="media-title">{currentMedia.title}</div>
+            )}
             <div className="media-container">
                 {currentMedia.type === "audio" ? (
                     <>
