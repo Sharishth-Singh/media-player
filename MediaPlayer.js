@@ -243,7 +243,11 @@ const MediaPlayer = () => {
     };
 
     return (
-        <div
+        <>
+      <div className={`media-player-title ${isMinimized ? "minimized-title" : ""}`}> 🎹Media Player App</div>
+
+
+<div
             className={`media-player ${isMinimized ? "minimized" : ""}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -310,50 +314,85 @@ const MediaPlayer = () => {
                         </span>
                     </div>
                     <div className="media-controls">
-                        <button onClick={skipBackward}>
-                            <FaFastBackward />
-                        </button>
-                        <button onClick={prevMedia_resetProgressBar}>
-                            <FaChevronLeft />
-                        </button>
-                        <button onClick={togglePlayPause}>
-                            {playing ? <FaPause /> : <FaPlay />}
-                        </button>
-                        <button onClick={nextMedia_resetProgressBar}>
-                            <FaChevronRight />
-                        </button>
-                        <button onClick={skipForward}>
-                            <FaFastForward />
-                        </button>
-                        <button onClick={toggleMute}>
-                            {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-                        </button>
-                        <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            value={volume}
-                            onChange={(e) =>
-                                setVolume(parseFloat(e.target.value))
-                            }
-                        />
-                        <button
-                            onClick={toggleFullScreen}
-                            className={!isMinimized ? "visible" : "hidden"}
-                        >
-                            {fullscreen ? <FaCompress /> : <FaExpand />}
-                        </button>
-                        <button onClick={toggleMinimize}>
-                            <FaTimes />
-                        </button>
+                    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={prevMedia_resetProgressBar}>
+            <FaChevronLeft />
+            {isHovered && <span className="control-text">Previous</span>}
+        </button>
+    </div>
+    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={skipBackward}>
+            <FaFastBackward />
+            {isHovered && <span className="control-text">Rewind</span>}
+        </button>
+    </div>
+    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={togglePlayPause}>
+            {playing ? <FaPause /> : <FaPlay />}
+            {isHovered && <span className="control-text">{playing ? 'Pause' : 'Play'}</span>}
+        </button>
+    </div>
+    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={skipForward}>
+            <FaFastForward />
+            {isHovered && <span className="control-text">Forward</span>}
+        </button>
+    </div>
+    
+    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={nextMedia_resetProgressBar}>
+            <FaChevronRight />
+            {isHovered && <span className="control-text">Next</span>}
+        </button>
+    </div>
+                      
+    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={toggleMute}>
+            {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+            {isHovered && <span className="control-text">{isMuted ? 'Unmute' : 'Mute'}</span>}
+        </button>
+    </div>
+    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value={volume}
+        onChange={(e) => {
+            setVolume(parseFloat(e.target.value));
+            setIsHovered(true); // Show volume percentage text when adjusting volume
+        }}
+    />
+    {isHovered && <span className="control-text">Volume: {Math.round(volume * 100)}%</span>}
+</div>
+
+                       <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={toggleFullScreen} className={!isMinimized ? "visible" : "hidden"}>
+            {fullscreen ? <FaCompress /> : <FaExpand />}
+            {isHovered && <span className="control-text">{fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</span>}
+        </button>
+    </div>
+
+    <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    {!fullscreen && (
+        <button onClick={toggleMinimize}>
+            <FaTimes />
+            {/* {isHovered && <span className="control-text">Minimize</span>} */}
+            {isHovered && <span className="control-text">{isMinimized ? 'Exit' : 'Minimize'}</span>}
+        </button>
+    )}
+</div>
                         {/* Speed list button */}
-                        <button onClick={toggleSpeedList}>
-                            <GiSpeedometer />
-                        </button>
+                         <div className="control-wrapper" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button onClick={toggleSpeedList} className={!isMinimized ? "visible" : "hidden"}>
+            <GiSpeedometer />
+            {isHovered && <span className="control-text">Speed</span>}
+        </button>
+    </div>
                         {/* Vertical speed list */}
                         {isSpeedListOpen && (
-                            <div className="speed-list">
+                            <div className={`speed-list ${isMinimized ? "hidden" : "visible"}`}>
                                 {playbackRates.map((rate) => (
                                     <button
                                         key={rate}
@@ -375,6 +414,8 @@ const MediaPlayer = () => {
                 </>
             )}
         </div>
+        </>
+        
     );
 };
 

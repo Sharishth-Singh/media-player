@@ -27,6 +27,16 @@ const useMediaStore = create((set) => ({
         type: 'audio',
         title: 'Audio 3'
       },
+      {
+        url: 'https://videos.pexels.com/video-files/2177906/2177906-hd_1920_1080_30fps.mp4',
+        type: 'video',
+        title: 'Video 3'
+      },
+      {
+        url: 'https://videos.pexels.com/video-files/5590457/5590457-uhd_3840_2160_30fps.mp4',
+        type: 'video',
+        title: 'Video 4'
+      },
       // your media list here
     ],
     currentIndex: 0,
